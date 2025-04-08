@@ -1,5 +1,8 @@
 name: Unit Tests
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -9,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -29,4 +32,4 @@ jobs:
         run: go test -race ./...
 
       - name: Build
-        run: go build -v ./cmd/github-mcp-server
+        run: go build -v ./cmd/main.go

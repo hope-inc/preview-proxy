@@ -1,7 +1,8 @@
 name: Lint
 on:
-  push:
   pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -45,6 +46,6 @@ jobs:
           assert-nothing-changed go fmt ./...
           assert-nothing-changed go mod tidy
 
-          bin/golangci-lint run --out-format=colored-line-number --timeout=3m || STATUS=$?
+          bin/golangci-lint run --timeout=3m || STATUS=$?
 
           exit $STATUS
