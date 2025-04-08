@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/hope-inc/preview-proxy/pkg"
 )
@@ -16,7 +17,7 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
 
-	http.Handle("/proxy/healthz", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/proxy/healthz", http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 		w.WriteHeader(http.StatusOK)
@@ -25,7 +26,11 @@ func main() {
 	http.Handle("/", proxy)
 	listenHost := fmt.Sprintf(":%v", port)
 	slog.Info("Listen on", "host", listenHost)
-	err := http.ListenAndServe(listenHost, nil)
+	server := &http.Server{
+		Addr:              listenHost,
+		ReadHeaderTimeout: 3 * time.Second,
+	}
+	err := server.ListenAndServe()
 	if err != nil {
 		slog.Error(err.Error())
 		os.Exit(1)
