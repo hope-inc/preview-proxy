@@ -26,7 +26,7 @@ func NewReverseProxy(schema string, proxyDomain string, baseDomain string, port 
 		if strings.Contains(host, ":") {
 			host = strings.Split(host, ":")[0]
 		}
-		if !strings.HasPrefix(host, proxyDomain) {
+		if !strings.HasSuffix(host, proxyDomain) {
 			slog.Warn("proxy warn", slog.Any("warn", host), slog.Any("proxyDomain", proxyDomain))
 			req.URL.Scheme = ""
 			req.URL.Host = ""
