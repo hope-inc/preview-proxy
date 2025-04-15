@@ -20,6 +20,7 @@ Preview Proxy is a simple yet powerful reverse proxy that allows you to route tr
 The proxy can be configured using environment variables:
 
 - `PORT`: Port to listen on (default: 18080)
+- `PROXY_DOMAIN`: Domain to listen on (required)
 - `ORIGIN_PORT`: Port of the origin server (default: 443)
 - `ORIGIN_BASE_DOMAIN`: Base domain for the origin server (required)
 - `ORIGIN_SCHEME`: Scheme for the origin server (default: http)

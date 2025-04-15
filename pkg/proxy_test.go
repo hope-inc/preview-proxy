@@ -5,7 +5,7 @@ import (
 )
 
 func TestNewReverseProxy(t *testing.T) {
-	proxy := NewReverseProxy("http", "example.com", 8080)
+	proxy := NewReverseProxy("http", "localhost", "example.com", 8080)
 	if proxy == nil {
 		t.Fatal("Expected non-nil proxy")
 	}
