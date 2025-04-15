@@ -19,10 +19,10 @@ func main() {
 
 	http.Handle("/proxy/healthz", http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"status":"ok"}`))
 		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	}))
-	proxy := pkg.NewReverseProxy(cfg.OriginScheme, cfg.OriginBaseDomain, cfg.OriginPort)
+	proxy := pkg.NewReverseProxy(cfg.OriginScheme, cfg.ProxyDomain, cfg.OriginBaseDomain, cfg.OriginPort)
 	http.Handle("/", proxy)
 	listenHost := fmt.Sprintf(":%v", port)
 	slog.Info("Listen on", "host", listenHost)

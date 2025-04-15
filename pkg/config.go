@@ -8,6 +8,7 @@ var c *Config
 
 type Config struct {
 	Port             int    `envconfig:"PORT" default:"18080"`
+	ProxyDomain      string `envconfig:"PROXY_DOMAIN" default:"localhost"`
 	OriginPort       int    `envconfig:"ORIGIN_PORT" default:"443"`
 	OriginBaseDomain string `envconfig:"ORIGIN_BASE_DOMAIN"`
 	OriginScheme     string `envconfig:"ORIGIN_SCHEME" default:"http"`

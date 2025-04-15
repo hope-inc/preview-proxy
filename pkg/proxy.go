@@ -20,9 +20,19 @@ type ReverseProxy struct {
 	BaseDomain    string
 }
 
-func NewReverseProxy(schema string, baseDomain string, port int) *ReverseProxy {
+func NewReverseProxy(schema string, proxyDomain string, baseDomain string, port int) *ReverseProxy {
 	director := func(req *http.Request) {
-		subDomain := strings.Split(req.Host, ".")[0]
+		host := req.Host
+		if strings.Contains(host, ":") {
+			host = strings.Split(host, ":")[0]
+		}
+		if !strings.HasPrefix(host, proxyDomain) {
+			slog.Warn("proxy warn", slog.Any("warn", host), slog.Any("proxyDomain", proxyDomain))
+			req.URL.Scheme = ""
+			req.URL.Host = ""
+			return
+		}
+		subDomain := strings.Split(host, ".")[0]
 		subDomain = strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(subDomain), "/", "-"), ".", "-")
 		req.URL.Scheme = schema
 		req.URL.Host = subDomain + "." + baseDomain + ":" + strconv.Itoa(port)
